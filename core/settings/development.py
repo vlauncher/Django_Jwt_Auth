@@ -12,7 +12,11 @@ ALLOWED_HOSTS = []
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / getenv('DB_NAME'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_jwt_auth_db',
+        'USER': 'v2dent',
+        'HOST': 'localhost',
+        'PASSWORD': 'Chelsea24462!',
+        'PORT': 5432,
     }
 }

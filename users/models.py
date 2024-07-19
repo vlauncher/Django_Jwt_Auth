@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from cloudinary.models import CloudinaryField
+from cloudinary.uploader import upload,destroy
 
 
 class MyUserManager(BaseUserManager):
@@ -90,10 +92,20 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     gender = models.CharField(max_length=1,choices=GENDER_CHOICES)
     phone_number = models.CharField(max_length=20, blank=True)
-    profile_picture = models.ImageField(upload_to='agent_profiles', blank=True, null=True)
+    profile_picture = CloudinaryField('image',blank=True)
+    profile_picture_url = models.URLField(blank=True)
 
     class Meta:
         db_table = 'profile'
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+    
+    # Save profile picture
+    def save(self, *args, **kwargs):
+        if self.profile_picture:
+            self.profile_picture_url = upload(self.profile_picture)['url']
+        super().save(*args, **kwargs)
+   
+
+    
